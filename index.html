@@ -1,0 +1,508 @@
+<!--
+  Project: CorroScan AI – AI-Based Detection of Corrosion in Metals
+  Sonal Sandip Wadhane | PRN: RBT25ME141 | Roll No.: ME2318
+  Divya Bhakte         | PRN: RBT25ME132 | Roll No.: ME2309
+  Pranavi Mohite       | PRN: RBT25ME143 | Roll No.: ME2320
+  File: index.html (HTML + CSS + JS combined)
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>◎</text></svg>"/>
+<title>CorroScan AI – Corrosion Detection</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{--bg:#050e1e;--bg2:#0a1628;--card:#0d1e35;--side:#071220;--top:rgba(5,14,30,.85);--cy:#00d4ff;--bl:#0066ff;--cyd:rgba(0,212,255,.12);--grad:linear-gradient(135deg,#00d4ff,#0066ff);--ok:#00e676;--warn:#ff9800;--bad:#ff3d57;--t1:#e8f0fe;--t2:#8899bb;--t3:#4a6080;--bd:rgba(0,212,255,.1);--bdh:rgba(0,212,255,.35);--sh:0 8px 32px rgba(0,0,0,.4);--sw:260px;--r:14px;--rl:20px}
+body.light{--bg:#f0f4ff;--bg2:#e8eefa;--card:#fff;--top:rgba(240,244,255,.9);--t1:#0a1628;--t2:#3a5080;--t3:#6a80a0;--bd:rgba(0,102,255,.12);--sh:0 4px 20px rgba(0,0,0,.1)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,Poppins,sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;display:flex;overflow-x:hidden;transition:background .3s,color .3s}
+a{color:var(--cy);text-decoration:none}button{cursor:pointer;border:none;outline:none;font-family:inherit}ul,ol{list-style:none}select,input{font-family:inherit}
+.hidden{display:none!important}
+.sidebar{position:fixed;top:0;left:0;width:var(--sw);height:100vh;background:var(--side);border-right:1px solid var(--bd);display:flex;flex-direction:column;z-index:1000;transition:transform .3s,width .3s;overflow:hidden}
+.sidebar.collapsed{width:70px}.sidebar.collapsed .lt,.sidebar.collapsed .nav-link span,.sidebar.collapsed .sf{display:none}
+.sh{display:flex;align-items:center;justify-content:space-between;padding:22px 18px;border-bottom:1px solid var(--bd)}
+.logo{display:flex;align-items:center;gap:10px;font-family:Poppins;font-weight:700;color:var(--t1)}.logo small{display:block;font-size:.65rem;color:var(--cy);letter-spacing:.12em}
+.nav{flex:1;padding:16px 10px;display:flex;flex-direction:column;gap:4px}
+.nav-link{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:var(--r);color:var(--t2);font-size:.9rem;font-weight:500;transition:.25s;white-space:nowrap}
+.nav-link:hover{background:var(--cyd);color:var(--cy)}.nav-link.active{background:var(--grad);color:#fff;font-weight:600}
+.sf{padding:16px 18px;border-top:1px solid var(--bd);font-size:.75rem;color:var(--ok)}
+.ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999}.ov.on{display:block}
+.main{margin-left:var(--sw);flex:1;display:flex;flex-direction:column;min-height:100vh;transition:margin-left .3s;min-width:0}.main.col{margin-left:70px}
+.topbar{position:sticky;top:0;height:68px;background:var(--top);backdrop-filter:blur(16px);border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;padding:0 28px;z-index:900}
+.tl,.tr{display:flex;align-items:center;gap:14px}
+.ib{background:none;color:var(--t1);font-size:1.2rem;padding:6px 10px;border-radius:8px}.ib:hover{background:var(--cyd)}
+.crumb{font-size:.85rem;font-weight:600;color:var(--cy)}.time{font-size:.78rem;color:var(--t3)}
+.av{width:38px;height:38px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.75rem;color:#fff}
+.content{flex:1;padding:32px 28px}
+.page{display:none;animation:fi .35s}.page.active{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.title{font-family:Poppins;font-size:2rem;line-height:1.2;margin-bottom:8px}
+.g{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sub{font-size:.95rem;color:var(--t2);max-width:600px;margin-bottom:28px}
+h2.st{font-size:1.1rem;margin-bottom:14px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--rl);padding:24px;box-shadow:var(--sh);margin-bottom:20px}
+.card h3{color:var(--cy);font-size:1rem;margin-bottom:14px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 22px;border-radius:var(--r);font-size:.88rem;font-weight:600;transition:.25s}
+.bp{background:var(--grad);color:#fff}.bp:hover{transform:translateY(-2px)}
+.bs{background:rgba(0,102,255,.15);color:var(--bl);border:1px solid rgba(0,102,255,.3)}
+.bo{background:transparent;color:var(--t2);border:1px solid var(--bd)}.bo:hover{border-color:var(--cy);color:var(--cy)}
+.bl{padding:14px 30px}.bm{padding:7px 14px;font-size:.8rem}.btn:disabled{opacity:.4;pointer-events:none}
+.row{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:28px}
+.stat{background:var(--card);border:1px solid var(--bd);border-radius:var(--rl);padding:22px;box-shadow:var(--sh)}
+.stat b{display:block;font-family:Poppins;font-size:2rem}.stat span{font-size:.8rem;color:var(--t2)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+.act{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--bd);font-size:.84rem}
+.act img{width:44px;height:44px;border-radius:8px;object-fit:cover}.act div{flex:1}.act small{color:var(--t3)}
+.steps li{display:flex;gap:10px;align-items:center;margin-bottom:10px;font-size:.875rem;color:var(--t2)}
+.steps i{width:26px;height:26px;border-radius:50%;background:var(--grad);color:#fff;font-style:normal;font-size:.75rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+.pb{height:8px;background:rgba(255,255,255,.07);border-radius:4px;overflow:hidden;margin-top:6px}.pb div{height:100%;background:var(--grad)}
+label{font-size:.8rem;font-weight:500;color:var(--t2);display:block;margin-bottom:6px}
+.sel,.inp{background:var(--bg2);border:1px solid var(--bd);border-radius:8px;color:var(--t1);padding:9px 14px;font-size:.875rem;min-width:180px}
+.sel:focus,.inp:focus{outline:none;border-color:var(--cy)}
+.upload{border:2px dashed var(--bd);background:var(--bg2);text-align:center;padding:48px 24px;cursor:pointer;transition:.25s}
+.upload:hover,.upload.drag{border-color:var(--cy);background:var(--cyd)}
+.upload h3{font-size:1.2rem;color:var(--t1)}.upload p{font-size:.85rem;color:var(--t2);margin:8px 0 22px}
+.cam{border-radius:var(--r);overflow:hidden;background:#000;max-height:360px}.cam video{width:100%;max-height:360px;object-fit:cover;display:block}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;margin-bottom:20px}
+.pv{position:relative;border-radius:var(--r);overflow:hidden;border:2px solid var(--bd);aspect-ratio:1;cursor:pointer}.pv.active{border-color:var(--cy)}
+.pv img{width:100%;height:100%;object-fit:cover}
+.pv button{position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;background:var(--bad);color:#fff}
+.load{position:fixed;inset:0;background:rgba(5,14,30,.88);backdrop-filter:blur(8px);z-index:2000;display:flex;align-items:center;justify-content:center}
+.lc{background:var(--card);border:1px solid var(--bd);border-radius:28px;padding:40px;text-align:center;max-width:340px;width:90%}
+.lc p{font-size:.85rem;color:var(--t2);margin:8px 0 20px}.lp{height:4px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden}
+.lp div{height:100%;width:0;background:var(--grad);transition:width .4s}
+canvas{max-width:100%}.res canvas{width:100%;border-radius:var(--r);display:block}
+table{width:100%;border-collapse:collapse;margin-bottom:16px}tr{border-bottom:1px solid var(--bd)}
+td,th{padding:10px 6px;font-size:.85rem;text-align:left;vertical-align:middle}td:first-child{color:var(--t3);width:40%}
+th{font-size:.75rem;text-transform:uppercase;color:var(--t3);background:var(--bg2)}
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.72rem;font-weight:700;text-transform:uppercase}
+.b-non-corroded,.b-low,.b-clean{background:rgba(0,230,118,.12);color:var(--ok)}.b-medium{background:rgba(255,152,0,.12);color:var(--warn)}.b-high,.b-corrosion{background:rgba(255,61,87,.12);color:var(--bad)}
+.ring{text-align:center;margin:16px 0}.ring p{font-size:.8rem;color:var(--t3)}
+.slider{position:relative;overflow:hidden;cursor:col-resize;background:#000;user-select:none}.slider canvas{display:block;width:100%}
+#compOverlay{position:absolute;top:0;left:0;clip-path:inset(0 50% 0 0)}
+#sliderDivider{position:absolute;top:0;bottom:0;left:50%;width:3px;background:var(--cy);transform:translateX(-50%);pointer-events:none}
+#sliderDivider::after{content:"⇆";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:32px;height:32px;border-radius:50%;background:var(--bg2);border:2px solid var(--cy);color:var(--cy);display:flex;align-items:center;justify-content:center}
+.info{display:flex;gap:28px;padding-top:16px;flex-wrap:wrap}.info small{display:block;font-size:.72rem;color:var(--t3);text-transform:uppercase}
+.pag{display:flex;justify-content:center;gap:8px;padding-top:14px}.pag button{width:34px;height:34px;border-radius:8px;background:var(--bg2);color:var(--t2);border:1px solid var(--bd)}.pag .on{background:var(--cy);color:#fff}
+.ab{background:none;color:var(--t3);padding:5px;font-size:1rem}.ab:hover{color:var(--cy)}
+.rh{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;padding-bottom:18px;border-bottom:2px solid var(--cy);margin-bottom:22px}
+.rid{color:var(--cy);font-weight:700;text-align:right}
+.fin{border-radius:var(--r);padding:18px;text-align:center;border:2px solid var(--bd)}.fin.c{border-color:var(--bad)}.fin.k{border-color:var(--ok)}
+.fin small{display:block;font-size:.72rem;text-transform:uppercase;color:var(--t3);margin-bottom:6px}.fin b{font-family:Poppins;font-size:1.4rem}
+.empty{text-align:center;padding:50px 20px;color:var(--t3)}.empty p{margin-bottom:16px}
+.about p,.about li{font-size:.9rem;line-height:1.7;color:var(--t2)}.about h2{color:var(--cy);font-size:1.2rem;margin-bottom:12px}
+.tg{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.tc{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r);padding:20px;text-align:center}
+.tc .av{width:60px;height:60px;font-size:1.1rem;margin:0 auto 12px}.tc h4{font-size:.95rem}.tc p{font-size:.8rem;color:var(--cy);margin:4px 0}.tc small{font-size:.72rem;color:var(--t3);line-height:1.5;display:block}
+footer{border-top:1px solid var(--bd);background:var(--side);padding:20px 28px;text-align:center;font-size:.75rem;color:var(--t3)}
+footer b{display:block;color:var(--cy);font-family:Poppins;font-size:1rem;margin-bottom:4px}footer p{margin-bottom:4px;color:var(--t2)}
+.toast{position:fixed;bottom:28px;right:28px;background:var(--card);border:1px solid var(--bd);border-left:4px solid var(--cy);border-radius:var(--r);padding:14px 20px;font-size:.875rem;z-index:9999;max-width:340px}
+.toast.success{border-left-color:var(--ok)}.toast.error{border-left-color:var(--bad)}
+@media(max-width:1100px){.stats{grid-template-columns:1fr 1fr}.two{grid-template-columns:1fr}}
+@media(max-width:768px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:none}.main,.main.col{margin-left:0}.content{padding:20px 14px}.topbar{padding:0 14px}.title{font-size:1.5rem}.btn.bl{width:100%;justify-content:center}}
+@media(max-width:480px){.stats{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<aside class="sidebar" id="sidebar">
+  <div class="sh"><div class="logo">◎ <span class="lt">CorroScan<small>AI</small></span></div><button class="ib" id="sidebarToggle">☰</button></div>
+  <nav class="nav" id="nav">
+    <a href="#" class="nav-link active" data-s="dashboard">▦ <span>Dashboard</span></a>
+    <a href="#" class="nav-link" data-s="detection">🔍 <span>Detection</span></a>
+    <a href="#" class="nav-link" data-s="results">✔ <span>Results</span></a>
+    <a href="#" class="nav-link" data-s="comparison">◧ <span>Comparison</span></a>
+    <a href="#" class="nav-link" data-s="history">🕘 <span>History</span></a>
+    <a href="#" class="nav-link" data-s="report">📄 <span>Report</span></a>
+    <a href="#" class="nav-link" data-s="about">ⓘ <span>About</span></a>
+  </nav>
+  <div class="sf">● AI System Online<br><small style="color:var(--t3)">CorroScan AI v1.0</small></div>
+</aside>
+<div class="ov" id="ov"></div>
+
+<div class="main" id="main">
+  <header class="topbar">
+    <div class="tl"><button class="ib" id="menuBtn">☰</button><div class="crumb" id="crumb">Dashboard</div></div>
+    <div class="tr"><div class="time" id="time"></div><button class="ib" id="themeBtn" title="Toggle theme">◐</button><div class="av" title="Team CorroScan">CS</div></div>
+  </header>
+
+  <main class="content">
+    <!-- DASHBOARD -->
+    <section class="page active" id="s-dashboard">
+      <h1 class="title">Welcome to <span class="g">CorroScan AI</span></h1>
+      <p class="sub">AI-powered corrosion detection and analysis platform for metal surface inspection.</p>
+      <div class="stats">
+        <div class="stat"><b id="statTotal">0</b><span>Total Inspections</span></div>
+        <div class="stat"><b id="statCorroded" style="color:var(--bad)">0</b><span>Corroded Surfaces</span></div>
+        <div class="stat"><b id="statClean" style="color:var(--ok)">0</b><span>Non-Corroded</span></div>
+        <div class="stat"><b>94.7%</b><span>Target Accuracy</span></div>
+      </div>
+      <h2 class="st">Quick Actions</h2>
+      <div class="row" style="margin-bottom:28px">
+        <button class="btn bp bl" onclick="go('detection')">⬆ Upload Image</button>
+        <button class="btn bs bl" onclick="go('detection');openCamera()">🎥 Start Inspection</button>
+        <button class="btn bo bl" onclick="go('history')">🕘 View History</button>
+      </div>
+      <div class="two">
+        <div class="card"><h3>Recent Activity</h3><div id="activityList"></div></div>
+        <div class="card"><h3>How It Works</h3>
+          <ol class="steps"><li><i>1</i>Upload a metal surface image</li><li><i>2</i>AI analyzes rust-coloured pixels</li><li><i>3</i>Severity &amp; confidence computed</li><li><i>4</i>Download detailed PDF report</li></ol>
+          <small style="color:var(--t2)">Target Accuracy 94.7%</small><div class="pb"><div style="width:94.7%"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DETECTION -->
+    <section class="page" id="s-detection">
+      <h1 class="title">Corrosion <span class="g">Detection</span></h1>
+      <p class="sub">Upload metal surface images or capture via camera for AI analysis.</p>
+      <div class="card"><div class="row">
+        <div><label for="materialSelect">Material Type</label><select id="materialSelect" class="sel"><option value="steel">Steel</option><option value="iron">Iron (Cast/Wrought)</option><option value="aluminium">Aluminium</option><option value="copper">Copper</option><option value="zinc">Zinc / Galvanized</option><option value="other">Other Metal</option></select></div>
+        <div><label for="sensitivitySelect">Detection Sensitivity</label><select id="sensitivitySelect" class="sel"><option value="normal">Normal</option><option value="high">High (subtle rust)</option><option value="low">Low (major rust only)</option></select></div>
+      </div></div>
+      <div class="card upload" id="uploadZone">
+        <div style="font-size:3rem">⬆</div><h3>Drag &amp; Drop Images Here</h3><p>Supports JPG, JPEG, PNG</p>
+        <button class="btn bp" id="chooseFileBtn">Choose File</button> <button class="btn bs" id="cameraBtn">🎥 Use Camera</button>
+        <input type="file" id="fileInput" accept="image/jpeg,image/png" multiple hidden/>
+      </div>
+      <div class="card hidden" id="cameraSection"><h3>Live Camera Feed</h3>
+        <div class="cam"><video id="cameraVideo" autoplay playsinline></video><canvas id="cameraCanvas" hidden></canvas></div>
+        <div class="row" style="margin-top:14px"><button class="btn bp" id="captureBtn">Capture</button><button class="btn bo" id="closeCameraBtn">Close Camera</button></div>
+      </div>
+      <div class="hidden" id="previewSection"><h2 class="st">Image Queue</h2><div class="grid" id="previewGrid"></div>
+        <div class="row"><button class="btn bp bl" id="analyzeBtn">🔍 Analyze Image</button><button class="btn bo" id="clearPreviewBtn">Clear All</button></div></div>
+      <div class="load hidden" id="loadingOverlay"><div class="lc"><h3 style="color:var(--t1)">Analyzing Image…</h3><p id="loadingStatus">Scanning pixel data…</p><div class="lp"><div id="loadingBar"></div></div></div></div>
+    </section>
+
+    <!-- RESULTS -->
+    <section class="page" id="s-results">
+      <h1 class="title">Analysis <span class="g">Results</span></h1><p class="sub">AI-generated corrosion analysis for the inspected surface.</p>
+      <div class="empty hidden" id="resultsEmpty"><p>No analysis yet. Please upload and analyze an image first.</p><button class="btn bp" onclick="go('detection')">Go to Detection</button></div>
+      <div id="resultsContent" class="two res">
+        <div class="card"><h3>Annotated Image</h3><canvas id="resultCanvas"></canvas>
+          <div class="row" style="margin-top:12px"><button class="btn bm bo" id="toggleHeatmapBtn">Hide Heatmap</button><button class="btn bm bo" id="toggleBboxBtn">Hide Bounding Box</button></div></div>
+        <div class="card"><h3>Prediction Summary</h3><table id="predTable"></table>
+          <div class="ring"><svg viewBox="0 0 120 120" width="120" height="120"><circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="12"/><circle id="confidenceCircle" cx="60" cy="60" r="52" fill="none" stroke="#00d4ff" stroke-width="12" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="326.7" transform="rotate(-90 60 60)" style="transition:stroke-dashoffset 1s"/><text id="confidenceText" x="60" y="66" text-anchor="middle" fill="#00d4ff" font-size="22" font-weight="700">0%</text></svg><p>AI Confidence Score</p></div>
+          <div class="row"><button class="btn bp" onclick="go('comparison')">View Comparison</button><button class="btn bs" onclick="go('report')">Generate Report</button></div></div>
+      </div>
+    </section>
+
+    <!-- COMPARISON -->
+    <section class="page" id="s-comparison">
+      <h1 class="title">Image <span class="g">Comparison</span></h1><p class="sub">Drag the slider to compare the original with the corrosion map.</p>
+      <div class="empty hidden" id="comparisonEmpty"><p>No analysis data. Please analyze an image first.</p><button class="btn bp" onclick="go('detection')">Go to Detection</button></div>
+      <div id="comparisonContent" class="card">
+        <div class="row" style="justify-content:space-between;margin-bottom:12px"><b style="font-size:.8rem;color:var(--t2)">ORIGINAL</b><b style="font-size:.8rem;color:var(--bad)">CORROSION MAP</b></div>
+        <div class="slider" id="sliderContainer"><canvas id="compOriginal"></canvas><canvas id="compOverlay"></canvas><div id="sliderDivider"></div></div>
+        <div class="info"><div><small>Corrosion Area</small><b id="compArea">—</b></div><div><small>Severity</small><b id="compSeverity">—</b></div><div><small>Material</small><b id="compMaterial">—</b></div></div>
+      </div>
+    </section>
+
+    <!-- HISTORY -->
+    <section class="page" id="s-history">
+      <h1 class="title">Inspection <span class="g">History</span></h1><p class="sub">All past inspections are stored locally in your browser.</p>
+      <div class="card"><div class="row" style="align-items:center">
+        <input class="inp" id="searchHistory" placeholder="Search inspections…" style="flex:1"/>
+        <select id="filterSeverity" class="sel"><option value="">All Severities</option><option value="non-corroded">Non-Corroded</option><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option></select>
+        <button class="btn bo bm" id="clearHistoryBtn">Clear All</button></div></div>
+      <div class="card" style="overflow-x:auto">
+        <table><thead><tr><th>Thumb</th><th>Image</th><th>Result</th><th>Severity</th><th>Conf.</th><th>Date</th><th>Actions</th></tr></thead><tbody id="historyBody"></tbody></table>
+        <div class="empty hidden" id="historyEmpty">No inspection records found.</div><div class="pag" id="pagination"></div>
+      </div>
+    </section>
+
+    <!-- REPORT -->
+    <section class="page" id="s-report">
+      <h1 class="title">Generate <span class="g">Report</span></h1><p class="sub">Detailed inspection report ready for download.</p>
+      <div class="empty hidden" id="reportEmpty"><p>No analysis data. Please analyze an image first.</p><button class="btn bp" onclick="go('detection')">Go to Detection</button></div>
+      <div id="reportContent">
+        <div class="card">
+          <div class="rh"><div class="logo">◎ <span>CorroScan AI<small style="color:var(--t3)">Official Inspection Report</small></span></div><div><div class="rid" id="reportId"></div><small id="reportDate" style="color:var(--t3)"></small></div></div>
+          <div class="two res"><canvas id="reportCanvas"></canvas><div><table id="rptTable"></table><div class="fin" id="finalResultBox"><small>Final Assessment</small><b id="finalResultVal">—</b></div></div></div>
+        </div>
+        <div class="row"><button class="btn bp bl" id="downloadPdfBtn">⬇ Download PDF Report</button><button class="btn bo bl" onclick="go('detection')">New Inspection</button></div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="page about" id="s-about">
+      <h1 class="title">About the <span class="g">Project</span></h1><p class="sub">Corrosion, AI-based detection, and the technology behind CorroScan.</p>
+      <div class="card"><h2>What Is Corrosion?</h2><p>Corrosion is the gradual degradation of metals through chemical or electrochemical reactions with their environment, most commonly seen as rust on iron and steel. It costs the global economy over <b>USD 2.5 trillion annually</b> (about 3.4% of global GDP) and poses safety risks in infrastructure, aerospace, marine and industrial sectors.</p></div>
+      <div class="card"><h2>Types of Corrosion</h2><ul><li>🌊 <b>Uniform</b> – attacks the whole exposed surface evenly.</li><li>🕳️ <b>Pitting</b> – small, deep pits that can cause hidden structural failure.</li><li>⚡ <b>Galvanic</b> – dissimilar metals in electrical contact in a corrosive environment.</li><li>🔩 <b>Crevice</b> – confined gaps and joints with differing oxygen concentration.</li></ul></div>
+      <div class="card"><h2>Why AI-Based Detection?</h2><ul><li>✅ Consistent assessment, instant severity measurement</li><li>✅ Scales to thousands of images; supports drone/camera footage</li><li>✅ Automated PDF reports for records</li></ul></div>
+      <div class="card"><h2>Technologies Used</h2><p>HTML5 Canvas, File &amp; Camera APIs · CSS3 · Vanilla JavaScript + localStorage · jsPDF · Future: TensorFlow.js CNN model</p></div>
+      <div class="card"><h2>Team</h2><div class="tg">
+        <div class="tc"><div class="av">SW</div><h4>Sonal Sandip Wadhane</h4><p>Team Member</p><small>PRN: RBT25ME141<br>Roll: ME2318</small></div>
+        <div class="tc"><div class="av">DB</div><h4>Divya Bhakte</h4><p>Team Member</p><small>PRN: RBT25ME132<br>Roll: ME2309</small></div>
+        <div class="tc"><div class="av">PM</div><h4>Pranavi Mohite</h4><p>Team Member</p><small>PRN: RBT25ME143<br>Roll: ME2320</small></div>
+      </div></div>
+    </section>
+  </main>
+
+  <footer>
+    <b>◎ CorroScan AI</b>
+    <p>Smarter Detection • Safer Structures • A More Durable Future</p>
+    Sonal Sandip Wadhane (RBT25ME141, ME2318) | Divya Bhakte (RBT25ME132, ME2309) | Pranavi Mohite (RBT25ME143, ME2320) &nbsp;© 2026
+  </footer>
+</div>
+
+<div class="toast hidden" id="toast"></div>
+<canvas id="hiddenCanvas" hidden></canvas>
+
+<script>
+/*
+  Sonal Sandip Wadhane | PRN: RBT25ME141 | Roll No.: ME2318
+  Divya Bhakte         | PRN: RBT25ME132 | Roll No.: ME2309
+  Pranavi Mohite       | PRN: RBT25ME143 | Roll No.: ME2320
+  CorroScan AI – pixel-level HSV rust detection on HTML5 Canvas (proof-of-concept;
+  analyzePixels() can later be swapped for a TensorFlow.js CNN).
+*/
+'use strict';
+const TEAM = [['Sonal Sandip Wadhane','RBT25ME141','ME2318'],['Divya Bhakte','RBT25ME132','ME2309'],['Pranavi Mohite','RBT25ME143','ME2320']];
+const S = {sec:'dashboard',files:[],idx:0,last:null,hist:[],collapsed:false,heat:true,bbox:true,page:1,per:6,stream:null};
+const RP = {hMin:0,hMax:40,vMin:.15,T:{LOW:.05,MED:.20,HIGH:.45}};
+const SENS = {normal:.25,high:.15,low:.40};
+const $ = id => document.getElementById(id);
+const MAT = {steel:'Steel',iron:'Iron (Cast/Wrought)',aluminium:'Aluminium',copper:'Copper',zinc:'Zinc / Galvanized',other:'Other Metal'};
+const sevCls = s => s.toLowerCase().replace(' ','-');
+
+function rgb2hsv(r,g,b){r/=255;g/=255;b/=255;const mx=Math.max(r,g,b),d=mx-Math.min(r,g,b);let h=0;
+  if(d){h=mx===r?60*(((g-b)/d)%6):mx===g?60*((b-r)/d+2):60*((r-g)/d+4);}if(h<0)h+=360;return{h,s:mx?d/mx:0,v:mx};}
+const rid = () => 'RPT-'+Date.now().toString(36).toUpperCase();
+const fmt = (d=new Date()) => d.toLocaleString('en-IN',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:true});
+function toast(m,t='info',ms=3500){const e=$('toast');e.textContent=m;e.className='toast '+t;clearTimeout(e._t);e._t=setTimeout(()=>e.classList.add('hidden'),ms);}
+function counter(el,to){const s=performance.now(),f=parseInt(el.textContent)||0;(function st(ts){const p=Math.min((ts-s)/800,1);el.textContent=Math.round(f+(to-f)*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(st);})(s);}
+const loadImage = f => new Promise((ok,no)=>{const i=new Image();i.onload=()=>{ok(i);URL.revokeObjectURL(i.src);};i.onerror=()=>no(new Error('Could not load image'));i.src=URL.createObjectURL(f);});
+
+/* ---------- Analysis engine ---------- */
+async function analyzePixels(file,sens='normal'){
+  const img=await loadImage(file),c=$('hiddenCanvas'),x=c.getContext('2d',{willReadFrequently:true});
+  const sc=Math.min(800/img.width,1);c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);
+  x.drawImage(img,0,0,c.width,c.height);
+  const W=c.width,H=c.height,px=x.getImageData(0,0,W,H).data,total=W*H,sat=SENS[sens]??.25;
+  const heat=x.createImageData(W,H),mask=new Uint8Array(total);
+  let minX=W,maxX=0,minY=H,maxY=0,n=0,cs=0;
+  for(let i=0;i<px.length;i+=4){
+    const{h,s,v}=rgb2hsv(px[i],px[i+1],px[i+2]),p=i/4;
+    const rust=h>=RP.hMin&&h<=RP.hMax&&s>=sat&&v>=RP.vMin;
+    heat.data[i]=255;heat.data[i+3]=rust?Math.min(255,Math.round(s*v*220)):0;
+    if(rust){n++;mask[p]=1;cs+=(1-Math.abs(h-20)/20)*s*v;const X=p%W,Y=(p/W)|0;
+      if(X<minX)minX=X;if(X>maxX)maxX=X;if(Y<minY)minY=Y;if(Y>maxY)maxY=Y;}
+  }
+  // Heatmap as a canvas so it can be blended (putImageData would overwrite the photo)
+  const hc=document.createElement('canvas');hc.width=W;hc.height=H;hc.getContext('2d').putImageData(heat,0,0);
+  const frac=n/total,pct=frac*100,raw=n?Math.min(98,(cs/n)*130):0,conf=Math.round(Math.max(pct>0?45:10,raw));
+  let sev,det;
+  if(frac<RP.T.LOW){sev='Non-Corroded';det='No Corrosion Detected';}
+  else if(frac<RP.T.MED){sev='Low';det='Corrosion Detected';}
+  else if(frac<RP.T.MED+.25){sev='Medium';det='Corrosion Detected';}
+  else{sev='High';det='Severe Corrosion Detected';}
+  const mat=MAT[$('materialSelect').value]||$('materialSelect').value;
+  return{canvas:c,heatCanvas:hc,rustPercent:pct.toFixed(1),confidence:conf,severity:sev,detection:det,
+    corrosionType:corrType(mask,W,H,n),action:action(sev,mat),surfaceCondition:surface(frac),
+    bbox:n?{x:minX,y:minY,w:maxX-minX,h:maxY-minY}:null,material:mat,imageName:file.name,timestamp:new Date()};
+}
+function corrType(m,W,H,n){
+  if(!n)return'None';const f=n/(W*H);if(f>.4)return'Uniform Corrosion';if(f>.15)return'General / Uniform';
+  let iso=0;for(let i=0;i<m.length;i++)if(m[i]){const x=i%W,y=(i/W)|0;
+    const nb=(x>0&&m[i-1])||(x<W-1&&m[i+1])||(y>0&&m[i-W])||(y<H-1&&m[i+W]);if(!nb)iso++;}
+  return iso/n>.3?'Pitting Corrosion':'Galvanic / Crevice';}
+function action(s,m){return({
+  'Non-Corroded':`No immediate action required. Apply protective coating on ${m} surface every 12 months.`,
+  'Low':`Apply rust converter and anti-corrosion primer on ${m}. Schedule re-inspection in 3 months.`,
+  'Medium':`Immediate surface preparation required. Sand or blast the ${m} surface, apply epoxy primer + topcoat. Re-inspect in 1 month.`,
+  'High':`URGENT: Structural risk possible. Remove corroded ${m} sections, assess load-bearing capacity, full surface treatment mandatory.`})[s]||'Consult a structural engineer.';}
+function surface(f){return f<.05?'Excellent – No significant corrosion':f<.20?'Good – Minor surface oxidation':f<.45?'Fair – Moderate corrosion present':'Poor – Severe corrosion, structural risk';}
+
+/* ---------- Canvas rendering ---------- */
+function drawAnnotated(t,r,heat=true,box=true){
+  const x=t.getContext('2d'),s=r.canvas;t.width=s.width;t.height=s.height;x.drawImage(s,0,0);
+  if(heat)x.drawImage(r.heatCanvas,0,0);
+  if(box&&r.bbox){const{x:bx,y:by,w,h}=r.bbox;x.strokeStyle='#ff3d57';x.lineWidth=Math.max(2,s.width*.003);x.strokeRect(bx,by,w,h);
+    const lb=`Corroded Area (${r.rustPercent}%)`,fs=Math.max(11,s.width*.018);x.font=`bold ${fs}px Inter,sans-serif`;
+    const tw=x.measureText(lb).width,lx=Math.max(4,Math.min(bx,s.width-tw-8)),ly=by>fs+10?by-fs-6:by+h+fs+4;
+    x.fillStyle='rgba(255,61,87,.9)';x.fillRect(lx-4,ly-fs,tw+8,fs+6);x.fillStyle='#fff';x.fillText(lb,lx,ly);}
+}
+function drawOverlay(t,r){const s=r.canvas,x=t.getContext('2d');t.width=s.width;t.height=s.height;x.drawImage(s,0,0);x.drawImage(r.heatCanvas,0,0);
+  x.globalAlpha=.25;x.fillStyle='#ff3d57';x.fillRect(0,0,s.width,s.height);x.globalAlpha=1;}
+
+/* ---------- Navigation ---------- */
+const LBL={dashboard:'Dashboard',detection:'Corrosion Detection',results:'Analysis Results',comparison:'Image Comparison',history:'Inspection History',report:'Generate Report',about:'About Project'};
+function go(n){
+  document.querySelectorAll('.page').forEach(s=>s.classList.remove('active'));$('s-'+n).classList.add('active');
+  document.querySelectorAll('.nav-link').forEach(l=>l.classList.toggle('active',l.dataset.s===n));
+  S.sec=n;$('crumb').textContent=LBL[n]||n;
+  if(n==='history')renderHistory();if(n==='results')initResults();if(n==='comparison')initComparison();
+  if(n==='report')initReport();if(n==='dashboard')updateDashboard();
+  if(innerWidth<=768)closeMobile();scrollTo({top:0,behavior:'smooth'});
+}
+function toggleSidebar(){
+  if(innerWidth<=768){$('sidebar').classList.toggle('open');$('ov').classList.toggle('on');}
+  else{S.collapsed=!S.collapsed;$('sidebar').classList.toggle('collapsed',S.collapsed);$('main').classList.toggle('col',S.collapsed);}}
+function closeMobile(){$('sidebar').classList.remove('open');$('ov').classList.remove('on');}
+
+/* ---------- Upload ---------- */
+function handleFiles(files){
+  const v=[...files].filter(f=>['image/jpeg','image/jpg','image/png'].includes(f.type));
+  if(!v.length)return toast('Please upload JPG or PNG images only.','error');
+  S.files=v;S.idx=0;renderPreview();$('previewSection').classList.remove('hidden');toast(`${v.length} image(s) loaded. Click "Analyze Image".`);}
+function renderPreview(){
+  const g=$('previewGrid');g.innerHTML='';
+  S.files.forEach((f,i)=>{const d=document.createElement('div');d.className='pv'+(i===S.idx?' active':'');
+    d.innerHTML=`<img src="${URL.createObjectURL(f)}" alt="${f.name}"/><button title="Remove">×</button>`;
+    d.querySelector('button').onclick=e=>{e.stopPropagation();S.files.splice(i,1);S.idx=0;
+      if(!S.files.length){$('previewSection').classList.add('hidden');g.innerHTML='';}else renderPreview();};
+    d.onclick=()=>{S.idx=i;g.querySelectorAll('.pv').forEach(x=>x.classList.remove('active'));d.classList.add('active');};
+    g.appendChild(d);});}
+
+async function runAnalysis(){
+  const f=S.files[S.idx];if(!f)return toast('Please select an image first.','error');
+  $('loadingOverlay').classList.remove('hidden');$('analyzeBtn').disabled=true;
+  const steps=[[10,'Loading image data…'],[30,'Scanning pixel channels…'],[55,'Detecting rust colour signatures…'],[75,'Computing severity & confidence…'],[90,'Generating heatmap…'],[100,'Analysis complete!']];
+  const delay=ms=>new Promise(r=>setTimeout(r,ms));
+  const anim=async()=>{for(const[p,m]of steps){$('loadingStatus').textContent=m;$('loadingBar').style.width=p+'%';await delay(400+Math.random()*200);}};
+  try{const[r]=await Promise.all([analyzePixels(f,$('sensitivitySelect').value),anim()]);
+    S.last=r;saveHistory(r);updateDashboard();$('loadingOverlay').classList.add('hidden');$('analyzeBtn').disabled=false;
+    toast('Analysis complete! View your results.','success');go('results');
+  }catch(e){console.error(e);$('loadingOverlay').classList.add('hidden');$('analyzeBtn').disabled=false;toast('Analysis failed: '+e.message,'error');}
+}
+
+/* ---------- Results / Comparison ---------- */
+const rows=(el,arr)=>el.innerHTML=arr.map(([k,v])=>`<tr><td>${k}</td><td>${v}</td></tr>`).join('');
+function show(prefix,ok){$(prefix+'Empty').classList.toggle('hidden',ok);$(prefix+'Content').classList.toggle('hidden',!ok);}
+function initResults(){
+  const r=S.last;show('results',!!r);if(!r)return;
+  drawAnnotated($('resultCanvas'),r,S.heat,S.bbox);
+  rows($('predTable'),[['Detection',`<span class="badge b-${r.detection.includes('No')?'clean':'corrosion'}">${r.detection}</span>`],['Corrosion Type',r.corrosionType],
+    ['Severity',`<span class="badge b-${sevCls(r.severity)}">${r.severity}</span>`],['Confidence',r.confidence+'%'],['Surface Condition',r.surfaceCondition],
+    ['Corrosion Area',r.rustPercent+'% of surface'],['Material',r.material],['Suggested Action',r.action]]);
+  const c=$('confidenceCircle');c.style.strokeDashoffset=2*Math.PI*52*(1-r.confidence/100);
+  c.style.stroke={'Non-Corroded':'#00e676',Low:'#00e676',Medium:'#ff9800',High:'#ff3d57'}[r.severity]||'#00d4ff';$('confidenceText').textContent=r.confidence+'%';}
+function initComparison(){
+  const r=S.last;show('comparison',!!r);if(!r)return;
+  const o=$('compOriginal');o.width=r.canvas.width;o.height=r.canvas.height;o.getContext('2d').drawImage(r.canvas,0,0);
+  drawOverlay($('compOverlay'),r);$('compArea').textContent=r.rustPercent+'%';$('compSeverity').textContent=r.severity;$('compMaterial').textContent=r.material;setSlider(.5);}
+function setSlider(f){const p=f*100;$('sliderDivider').style.left=p+'%';$('compOverlay').style.clipPath=`inset(0 ${100-p}% 0 0)`;}
+function initSlider(){
+  const c=$('sliderContainer');let d=false;
+  const mv=x=>{const b=c.getBoundingClientRect();setSlider(Math.max(0,Math.min(1,(x-b.left)/b.width)));};
+  c.addEventListener('mousedown',e=>{d=true;mv(e.clientX);});addEventListener('mousemove',e=>{if(d)mv(e.clientX);});addEventListener('mouseup',()=>d=false);
+  c.addEventListener('touchstart',e=>{d=true;mv(e.touches[0].clientX);},{passive:true});
+  addEventListener('touchmove',e=>{if(d)mv(e.touches[0].clientX);},{passive:true});addEventListener('touchend',()=>d=false);}
+
+/* ---------- History ---------- */
+function saveHistory(r){
+  const t=document.createElement('canvas');t.width=80;t.height=60;t.getContext('2d').drawImage(r.canvas,0,0,80,60);
+  S.hist.unshift({id:rid(),imageName:r.imageName,thumbnail:t.toDataURL('image/jpeg',.6),detection:r.detection,severity:r.severity,confidence:r.confidence,
+    rustPercent:r.rustPercent,material:r.material,timestamp:r.timestamp.toISOString()});
+  try{localStorage.setItem('corroscan_history',JSON.stringify(S.hist));}catch(e){console.warn(e);}}
+function loadHistory(){try{S.hist=JSON.parse(localStorage.getItem('corroscan_history'))||[];}catch{S.hist=[];}}
+function renderHistory(){
+  const q=$('searchHistory').value.toLowerCase(),sv=$('filterSeverity').value;
+  const recs=S.hist.filter(r=>(r.imageName.toLowerCase().includes(q)||r.detection.toLowerCase().includes(q))&&(!sv||r.severity.toLowerCase()===sv));
+  const pages=Math.ceil(recs.length/S.per);if(S.page>pages)S.page=1;
+  const pg=recs.slice((S.page-1)*S.per,S.page*S.per);$('historyEmpty').classList.toggle('hidden',recs.length>0);
+  $('historyBody').innerHTML=pg.map(r=>`<tr><td><img src="${r.thumbnail}" width="50" height="40" style="border-radius:6px"/></td>
+    <td style="color:var(--t1)">${r.imageName}</td><td><span class="badge b-${r.detection.includes('No')?'clean':'corrosion'}">${r.detection}</span></td>
+    <td><span class="badge b-${sevCls(r.severity)}">${r.severity}</span></td><td style="color:var(--cy)">${r.confidence}%</td><td>${fmt(new Date(r.timestamp))}</td>
+    <td><button class="ab" data-id="${r.id}" data-a="view" title="View">👁</button><button class="ab" data-id="${r.id}" data-a="dl" title="Download">⬇</button><button class="ab" data-id="${r.id}" data-a="del" title="Delete">🗑</button></td></tr>`).join('');
+  $('historyBody').querySelectorAll('.ab').forEach(b=>b.onclick=()=>{
+    const rec=S.hist.find(r=>r.id===b.dataset.id);if(!rec)return;
+    if(b.dataset.a==='del'){S.hist=S.hist.filter(r=>r.id!==rec.id);localStorage.setItem('corroscan_history',JSON.stringify(S.hist));renderHistory();updateDashboard();toast('Record deleted.');}
+    else if(b.dataset.a==='dl'){const a=document.createElement('a');a.href=rec.thumbnail;a.download=`corroscan_${rec.id}.jpg`;a.click();}
+    else toast(`${rec.imageName} | ${rec.severity} | ${rec.confidence}% confidence`,'info',5000);});
+  const pa=$('pagination');pa.innerHTML='';
+  if(pages>1)for(let p=1;p<=pages;p++){const b=document.createElement('button');b.textContent=p;b.className=p===S.page?'on':'';b.onclick=()=>{S.page=p;renderHistory();};pa.appendChild(b);}
+}
+
+/* ---------- Dashboard ---------- */
+function updateDashboard(){
+  const t=S.hist.length,c=S.hist.filter(r=>r.severity!=='Non-Corroded').length;
+  counter($('statTotal'),t);counter($('statCorroded'),c);counter($('statClean'),t-c);
+  $('activityList').innerHTML=t?S.hist.slice(0,5).map(r=>`<div class="act"><img src="${r.thumbnail}"/><div>${r.imageName}<br><small>${fmt(new Date(r.timestamp))} • ${r.material}</small></div><span class="badge b-${sevCls(r.severity)}">${r.severity}</span></div>`).join('')
+    :'<div class="empty"><p>No inspections yet. Upload an image to begin.</p></div>';}
+
+/* ---------- Report ---------- */
+let curReportId='';
+function initReport(){
+  const r=S.last;show('report',!!r);if(!r)return;
+  curReportId=rid();$('reportId').textContent=curReportId;$('reportDate').textContent=fmt(r.timestamp);
+  drawAnnotated($('reportCanvas'),r,true,true);
+  rows($('rptTable'),[['Image Name',r.imageName],['Material',r.material],['Detection Result',r.detection],['Corrosion Type',r.corrosionType],
+    ['Severity Level',`<span class="badge b-${sevCls(r.severity)}">${r.severity}</span>`],['AI Confidence',r.confidence+'%'],['Corrosion Area',r.rustPercent+'%'],
+    ['Surface Condition',r.surfaceCondition],['Suggested Action',r.action],['Inspector','CorroScan AI v1.0'],
+    ['Prepared by',TEAM.map(t=>`${t[0]} (${t[1]})`).join('<br>')]]);
+  const bad=r.severity!=='Non-Corroded';$('finalResultBox').className='fin '+(bad?'c':'k');
+  const v=$('finalResultVal');v.textContent=bad?`⚠ ${r.severity} Corrosion Detected`:'✓ Surface is Clean';
+  v.style.color=bad?(r.severity==='High'?'var(--bad)':'var(--warn)'):'var(--ok)';}
+function downloadPDF(){
+  const r=S.last;if(!r)return toast('No analysis data available.','error');
+  if(!window.jspdf)return toast('jsPDF library not available (check internet connection).','error');
+  const doc=new window.jspdf.jsPDF({orientation:'portrait',unit:'mm',format:'a4'}),W=doc.internal.pageSize.getWidth(),H=doc.internal.pageSize.getHeight();
+  doc.setFillColor(5,14,30);doc.rect(0,0,W,H,'F');doc.setFillColor(0,212,255);doc.rect(0,0,W,18,'F');
+  doc.setTextColor(5,14,30);doc.setFont('helvetica','bold');doc.setFontSize(14);doc.text('CorroScan AI - Official Inspection Report',14,12);
+  doc.setTextColor(200,220,255);doc.setFont('helvetica','normal');doc.setFontSize(9);doc.text(`Report ID: ${curReportId}    Date: ${fmt(r.timestamp)}`,14,26);
+  try{let iw=90,ih=iw*(r.canvas.height/r.canvas.width);if(ih>70){ih=70;iw=ih*(r.canvas.width/r.canvas.height);}doc.addImage($('reportCanvas').toDataURL('image/jpeg',.85),'JPEG',14,32,iw,ih);}catch(e){console.warn(e);}
+  const det=[['Image Name',r.imageName],['Material',r.material],['Detection',r.detection],['Corrosion Type',r.corrosionType],['Severity',r.severity],
+    ['AI Confidence',r.confidence+'%'],['Corrosion Area',r.rustPercent+'%'],['Surface Condition',r.surfaceCondition],['Inspector','CorroScan AI v1.0']];
+  const c1=108,c2=150;doc.setFontSize(9);
+  det.forEach(([k,v],i)=>{const y=32+i*8,e=i%2===0;doc.setFillColor(e?15:22,e?26:36,e?48:64);doc.rect(c1,y-5,W-c1-10,8,'F');
+    doc.setTextColor(136,153,187);doc.text(k+':',c1+2,y);doc.setTextColor(232,240,254);doc.text(String(v),c2,y,{maxWidth:W-c2-12});});
+  let y=32+det.length*8+6;doc.setFillColor(20,40,80);doc.roundedRect(c1,y,W-c1-10,34,2,2,'F');
+  doc.setTextColor(0,212,255);doc.setFont('helvetica','bold');doc.text('Suggested Action:',c1+4,y+7);
+  doc.setFont('helvetica','normal');doc.setTextColor(200,220,255);doc.setFontSize(8);doc.text(doc.splitTextToSize(r.action,W-c1-18),c1+4,y+13);
+  // Team block
+  y=130;doc.setTextColor(0,212,255);doc.setFont('helvetica','bold');doc.setFontSize(10);doc.text('Prepared by:',14,y);
+  doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(232,240,254);
+  TEAM.forEach((t,i)=>doc.text(`${t[0]}  |  PRN: ${t[1]}  |  Roll No.: ${t[2]}`,14,y+8+i*7));
+  const bad=r.severity!=='Non-Corroded',col=bad?(r.severity==='High'?[255,61,87]:[255,152,0]):[0,230,118];
+  doc.setFillColor(...col.map(c=>Math.round(c*.15)));doc.roundedRect(14,H-40,W-28,20,2,2,'F');
+  doc.setDrawColor(...col);doc.setLineWidth(.8);doc.roundedRect(14,H-40,W-28,20,2,2,'S');
+  doc.setTextColor(...col);doc.setFont('helvetica','bold');doc.setFontSize(11);
+  doc.text(bad?`${r.severity} Corrosion Detected`:'Surface is Clean - No Corrosion',W/2,H-28,{align:'center'});
+  doc.setTextColor(74,96,128);doc.setFont('helvetica','normal');doc.setFontSize(7);
+  doc.text('CorroScan AI | Smarter Detection · Safer Structures · A More Durable Future',W/2,H-6,{align:'center'});
+  doc.save(`CorroScan_Report_${curReportId}.pdf`);toast('PDF report downloaded!','success');}
+
+/* ---------- Camera ---------- */
+async function openCamera(){
+  try{S.stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});$('cameraVideo').srcObject=S.stream;
+    $('cameraSection').classList.remove('hidden');toast('Camera ready. Click "Capture".');}
+  catch(e){toast('Camera access denied or not available.','error');}}
+function closeCamera(){if(S.stream){S.stream.getTracks().forEach(t=>t.stop());S.stream=null;}$('cameraVideo').srcObject=null;$('cameraSection').classList.add('hidden');}
+function capture(){
+  const v=$('cameraVideo'),c=$('cameraCanvas');c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0);
+  c.toBlob(b=>{if(!b)return toast('Failed to capture frame.','error');S.files=[new File([b],'camera-capture.jpg',{type:'image/jpeg'})];S.idx=0;
+    renderPreview();$('previewSection').classList.remove('hidden');closeCamera();toast('Frame captured! Click "Analyze Image".','success');},'image/jpeg',.92);}
+
+/* ---------- Init ---------- */
+function init(){
+  loadHistory();if(localStorage.getItem('corroscan_theme')==='light')document.body.classList.add('light');
+  const tick=()=>$('time').textContent=new Date().toLocaleTimeString('en-IN',{hour12:true});tick();setInterval(tick,1000);
+  document.querySelectorAll('.nav-link').forEach(l=>l.onclick=e=>{e.preventDefault();go(l.dataset.s);});
+  $('menuBtn').onclick=toggleSidebar;$('sidebarToggle').onclick=toggleSidebar;$('ov').onclick=closeMobile;
+  $('themeBtn').onclick=()=>{document.body.classList.toggle('light');const l=document.body.classList.contains('light');localStorage.setItem('corroscan_theme',l?'light':'dark');toast(`Switched to ${l?'light':'dark'} theme`,'info',1500);};
+  const uz=$('uploadZone');uz.onclick=()=>$('fileInput').click();$('chooseFileBtn').onclick=e=>{e.stopPropagation();$('fileInput').click();};
+  $('cameraBtn').onclick=e=>{e.stopPropagation();openCamera();};
+  $('fileInput').onchange=e=>handleFiles(e.target.files);
+  uz.ondragover=e=>{e.preventDefault();uz.classList.add('drag');};uz.ondragleave=()=>uz.classList.remove('drag');
+  uz.ondrop=e=>{e.preventDefault();uz.classList.remove('drag');handleFiles(e.dataTransfer.files);};
+  $('closeCameraBtn').onclick=closeCamera;$('captureBtn').onclick=capture;$('analyzeBtn').onclick=runAnalysis;
+  $('clearPreviewBtn').onclick=()=>{S.files=[];$('previewSection').classList.add('hidden');$('previewGrid').innerHTML='';$('fileInput').value='';};
+  $('toggleHeatmapBtn').onclick=()=>{S.heat=!S.heat;drawAnnotated($('resultCanvas'),S.last,S.heat,S.bbox);$('toggleHeatmapBtn').textContent=S.heat?'Hide Heatmap':'Show Heatmap';};
+  $('toggleBboxBtn').onclick=()=>{S.bbox=!S.bbox;drawAnnotated($('resultCanvas'),S.last,S.heat,S.bbox);$('toggleBboxBtn').textContent=S.bbox?'Hide Bounding Box':'Show Bounding Box';};
+  $('searchHistory').oninput=()=>{S.page=1;renderHistory();};$('filterSeverity').onchange=()=>{S.page=1;renderHistory();};
+  $('clearHistoryBtn').onclick=()=>{if(confirm('Clear all inspection history? This cannot be undone.')){S.hist=[];localStorage.removeItem('corroscan_history');renderHistory();updateDashboard();toast('History cleared.');}};
+  $('downloadPdfBtn').onclick=downloadPDF;
+  initSlider();go('dashboard');
+  console.log('%cCorroScan AI v1.0 initialised','color:#00d4ff;font-weight:bold;font-size:14px;');
+  TEAM.forEach(t=>console.log(`${t[0]} | PRN: ${t[1]} | Roll: ${t[2]}`));
+}
+document.addEventListener('DOMContentLoaded',init);
+</script>
+</body>
+</html>
